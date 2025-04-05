@@ -38,7 +38,7 @@ export default function ViewApp({ params }: { params: { id: string } }) {
         URL.revokeObjectURL(blobUrl);
       }
     };
-  }, [params.id]);
+  }, [params.id, blobUrl]);
 
   const handleDownloadCode = async () => {
     if (!app) return;

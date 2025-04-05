@@ -68,10 +68,11 @@ export async function POST(request: NextRequest) {
     
     // Return the generated HTML code
     return NextResponse.json({ code: text });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error generating code with Gemini:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Error generating code with Gemini API';
     return NextResponse.json(
-      { error: error.message || 'Error generating code with Gemini API' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

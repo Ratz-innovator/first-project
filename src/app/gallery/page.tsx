@@ -24,12 +24,6 @@ export default function Gallery() {
     setApps(apps.filter(app => app.id !== id));
   };
 
-  // Create blob URL for preview
-  const createPreviewUrl = (code: string) => {
-    const blob = new Blob([code], { type: 'text/html' });
-    return URL.createObjectURL(blob);
-  };
-
   // Format date
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString('en-US', {

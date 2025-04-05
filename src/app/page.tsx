@@ -24,7 +24,7 @@ export default function Home() {
 
   // Check for id parameter on load for remixing
   useEffect(() => {
-    const id = searchParams.get('id');
+    const id = searchParams?.get('id');
     if (id) {
       const app = getAppById(id);
       if (app) {
@@ -58,7 +58,7 @@ export default function Home() {
       const url = URL.createObjectURL(blob);
       setBlobUrl(url);
     }
-  }, [generatedCode]);
+  }, [generatedCode, blobUrl]);
 
   const handleGenerateApp = async () => {
     if (!prompt.trim()) return;
@@ -90,9 +90,10 @@ export default function Home() {
       // Auto-save to localStorage
       saveApp(prompt, data.code);
       setIsSaved(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error generating app:', err);
-      setError(err.message || 'Something went wrong. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -131,9 +132,10 @@ export default function Home() {
       
       // Clear update prompt field
       setUpdatePrompt('');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error updating app:', err);
-      setError(err.message || 'Something went wrong while updating. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong while updating. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsUpdating(false);
     }
@@ -222,7 +224,7 @@ export default function Home() {
         
         {isRemixed && (
           <div className="mb-4 sm:mb-6 p-3 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
-            You're remixing an existing app! Edit the prompt to make changes.
+            You&apos;re remixing an existing app! Edit the prompt to make changes.
           </div>
         )}
         
@@ -320,7 +322,7 @@ export default function Home() {
               <div className="mb-2 text-left">
                 <h4 className="font-medium text-gray-700 dark:text-gray-200">Want to change something?</h4>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Just describe what you want to change, and we'll update the app.
+                  Just describe what you want to change, and we&apos;ll update the app.
                 </p>
               </div>
               
