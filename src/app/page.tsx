@@ -58,7 +58,7 @@ export default function Home() {
       const url = URL.createObjectURL(blob);
       setBlobUrl(url);
     }
-  }, [generatedCode, blobUrl]);
+  }, [generatedCode]);
 
   const handleGenerateApp = async () => {
     if (!prompt.trim()) return;
