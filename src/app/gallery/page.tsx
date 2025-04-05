@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { getSavedApps, deleteApp, SavedApp } from '@/utils/storage';
 
-export default function Gallery() {
+function GalleryContent() {
   const [apps, setApps] = useState<SavedApp[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -126,5 +126,17 @@ export default function Gallery() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Gallery() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-black">
+        <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+      </div>
+    }>
+      <GalleryContent />
+    </Suspense>
   );
 } 

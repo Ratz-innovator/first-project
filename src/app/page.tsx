@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import Link from 'next/link';
 import { saveApp, getAppById } from '@/utils/storage';
 
-export default function Home() {
+// Create a separate component for the part that uses useSearchParams
+function AppContent() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
@@ -366,5 +367,18 @@ export default function Home() {
         <p>Create and share web apps instantly with AI</p>
       </footer>
     </div>
+  );
+}
+
+// Main component that wraps the content in a Suspense boundary
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin h-10 w-10 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+      </div>
+    }>
+      <AppContent />
+    </Suspense>
   );
 }

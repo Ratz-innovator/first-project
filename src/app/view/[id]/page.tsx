@@ -1,12 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { getAppById } from '@/utils/storage';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-export default function ViewApp({ params }: { params: { id: string } }) {
+interface AppViewProps {
+  params: {
+    id: string;
+  };
+}
+
+function AppViewContent({ id }: { id: string }) {
   const [app, setApp] = useState<{
     id: string;
     prompt: string;
@@ -20,7 +26,7 @@ export default function ViewApp({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     // Get app from localStorage
-    const appData = getAppById(params.id);
+    const appData = getAppById(id);
     
     if (appData) {
       setApp(appData);
@@ -38,7 +44,7 @@ export default function ViewApp({ params }: { params: { id: string } }) {
         URL.revokeObjectURL(blobUrl);
       }
     };
-  }, [params.id]);
+  }, [id]);
 
   const handleDownloadCode = async () => {
     if (!app) return;
@@ -190,5 +196,17 @@ export default function ViewApp({ params }: { params: { id: string } }) {
         />
       </main>
     </div>
+  );
+}
+
+export default function ViewApp({ params }: AppViewProps) {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-black">
+        <div className="animate-spin h-10 w-10 sm:h-12 sm:w-12 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+      </div>
+    }>
+      <AppViewContent id={params.id} />
+    </Suspense>
   );
 } 
